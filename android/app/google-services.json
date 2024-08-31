@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "521771457822",
+    "project_id": "acptlm-espoir",
+    "storage_bucket": "acptlm-espoir.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:521771457822:android:f3fef568550c448cfa7d0f",
+        "android_client_info": {
+          "package_name": "com.gnac.espoir_model_application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDA8AxRXYHG2dNEzeWZMcUXoc4cWFSWnlY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
