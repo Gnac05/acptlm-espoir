@@ -1,5 +1,4 @@
 import 'package:espoir_model_application/infrastructure/inventory/inventory_remote_datasource.dart';
-import 'package:espoir_model_application/main.dart';
 import 'package:espoir_model_application/presentation/inventory/widget/degradation_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -27,8 +26,8 @@ class InventoryPage extends StatelessWidget {
                 )
               : ListView.builder(
                   itemBuilder: (context, index) =>
-                      DegradationWidget(degradation: myDegradations[index]),
-                  itemCount: 10,
+                      DegradationWidget(degradation: snapshot.data![index]),
+                  itemCount: snapshot.data!.length,
                 );
         }
       },

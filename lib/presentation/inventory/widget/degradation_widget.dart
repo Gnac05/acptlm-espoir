@@ -1,4 +1,4 @@
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:espoir_model_application/domain/degradation.dart';
 import 'package:espoir_model_application/presentation/inventory/widget/my_rich_text.dart';
@@ -20,15 +20,15 @@ class DegradationWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: 100,
-              width: 100,
+              height: 120,
+              width: 120,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(15),
                   bottomLeft: Radius.circular(15),
                 ),
                 image: DecorationImage(
-                  image: Image.file(File(degradation.imageUrl!)).image,
+                  image: Image.network(degradation.imageUrl!).image,
                   fit: BoxFit.cover,
                 ),
               ),
