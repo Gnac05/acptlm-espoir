@@ -4,7 +4,7 @@
 import 'package:espoir_model_application/domain/_common/app_colors.dart';
 // import 'package:espoir_model_application/domain/degradation.dart';
 // import 'package:espoir_model_application/geolocator_exemple.dart';
-import 'package:espoir_model_application/presentation/app.dart';
+import 'package:espoir_model_application/presentation/onboarding/onboarding_page.dart';
 import 'package:flutter/material.dart';
 
 // import 'camera_exemple_view.dart';
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         ),
         // useMaterial3: true,
       ),
-      home: const MyAppPage(),
+      home: const OnboardingPage(),
     );
   }
 }
