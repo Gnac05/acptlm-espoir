@@ -2,6 +2,7 @@ import 'package:espoir_model_application/domain/_common/app_colors.dart';
 import 'package:espoir_model_application/domain/_common/app_image.dart';
 import 'package:espoir_model_application/domain/_common/app_svg.dart';
 import 'package:espoir_model_application/presentation/_common-widget/my_drop_button.dart';
+import 'package:espoir_model_application/presentation/inventory/inventory_v2_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -77,7 +78,14 @@ class MyAppPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 25.0, bottom: 125),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const InventoryV2Page(),
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
