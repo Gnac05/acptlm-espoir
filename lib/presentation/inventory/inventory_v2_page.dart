@@ -19,7 +19,7 @@ class InventoryV2Page extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title: const Text('INVENTAIRES'),
+        title: const Text(''),
         foregroundColor: AppColors.primary,
         backgroundColor: Colors.white,
       ),

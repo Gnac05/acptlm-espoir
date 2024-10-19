@@ -61,8 +61,8 @@ class DegradationV2Widget extends StatelessWidget {
                         ),
                       ),
                       const CustomRowTextWidget(
-                        title: 'Degradation détectées',
-                        subTitle: 'Sept (07) fractures',
+                        title: 'Nbr. de Dégradation',
+                        subTitle: '07 fractures',
                       ),
                       const CustomRowTextWidget(
                         title: 'Longitude',
