@@ -1,8 +1,12 @@
 import 'dart:async';
 
 import 'package:camera/camera.dart';
+import 'package:espoir_model_application/domain/_common/app_colors.dart';
+import 'package:espoir_model_application/domain/_common/app_svg.dart';
 import 'package:espoir_model_application/main.dart';
+import 'package:espoir_model_application/presentation/inventory/inventory_v2_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CameraDetectorPage extends StatefulWidget {
   const CameraDetectorPage({super.key});
@@ -18,6 +22,7 @@ class _CameraDetectorPageState extends State<CameraDetectorPage>
   late AnimationController _animationController;
   late AnimationController _recController;
   bool _isBlinking = false;
+  bool starting = true;
   late Animation<double> _flashModeControlRowAnimation;
   late AnimationController _flashModeControlRowAnimationController;
 
@@ -29,7 +34,7 @@ class _CameraDetectorPageState extends State<CameraDetectorPage>
   final double _maxAvailableZoom = 1.0;
 
   Timer? _timer;
-  Timer? _timerTakePicture;
+  // Timer? _timerTakePicture;
   int _elapsedSeconds = 0;
   bool _isRunning = false;
 
@@ -37,7 +42,7 @@ class _CameraDetectorPageState extends State<CameraDetectorPage>
     setState(() {
       if (_isRunning) {
         _timer!.cancel();
-        _timerTakePicture!.cancel();
+        // _timerTakePicture!.cancel();
       } else {
         _startTimer();
         // _startDection();
@@ -122,9 +127,9 @@ class _CameraDetectorPageState extends State<CameraDetectorPage>
     if (_timer != null && _timer!.isActive) {
       _timer!.cancel();
     }
-    if (_timerTakePicture != null && _timerTakePicture!.isActive) {
-      _timerTakePicture!.cancel();
-    }
+    // if (_timerTakePicture != null && _timerTakePicture!.isActive) {
+    //   _timerTakePicture!.cancel();
+    // }
     super.dispose();
   }
 
@@ -151,126 +156,228 @@ class _CameraDetectorPageState extends State<CameraDetectorPage>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          decoration: const BoxDecoration(color: Colors.black),
-          child: Column(
-            children: [
-              Expanded(
-                flex: 5,
-                child: Stack(
-                  children: [
-                    Center(child: _cameraPreviewWidget()),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 30.0, right: 10),
-                          child: FadeTransition(
-                            opacity: _isBlinking
-                                ? _recController
-                                : const AlwaysStoppedAnimation<double>(1.0),
-                            child: const Icon(
-                              Icons.circle,
-                              color: Colors.red,
-                              size: 15.0,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          _formatTime(_elapsedSeconds),
-                          style: const TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: IconButton(
-                          icon: const Icon(Icons.flash_on),
-                          color: Colors.red,
-                          onPressed: controller != null
-                              ? onFlashModeButtonPressed
-                              : null,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 15.0,
-                        left: 20,
-                      ),
-                      child: _flashModeControlColumnWidget(),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: () async {
-                          if (controller != null &&
-                              controller!.value.isInitialized &&
-                              !controller!.value.isRecordingVideo &&
-                              _animationController.status ==
-                                  AnimationStatus.completed) {
-                            await onTakePictureButtonPressed();
-                          }
-                        },
-                        icon: const Icon(
-                          Icons.circle,
-                          color: Colors.white,
-                          size: 50,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          _toggleIcon();
-                          _togglePlayPause();
-                          _toggleBlinking();
-                        },
-                        icon: AnimatedIcon(
-                          icon: AnimatedIcons.pause_play,
-                          color: Colors.white,
-                          size: 100,
-                          progress: _animationController,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (context) => const ReportPage(),
-                          //     ));
-                          // Navigator.replace(context,
-                          //     oldRoute: MaterialPageRoute(
-                          //       builder: (context) => const ModelDetectorPage(),
-                          //     ),
-                          //     newRoute: MaterialPageRoute(
-                          //       builder: (context) => const ReportPage(),
-                          //     ));
-                        },
-                        icon: const Icon(
-                          Icons.stop,
-                          color: Colors.red,
-                          size: 50,
-                        ),
-                      ),
-                    ],
+        backgroundColor: AppColors.primary,
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: SvgPicture.asset(AppSvg.flash),
+                    onPressed:
+                        controller != null ? onFlashModeButtonPressed : null,
                   ),
-                ),
+                  const Text(
+                    "Caméra de détection",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            Expanded(
+              child: Stack(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: _cameraPreviewWidget(),
+                  ),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 20),
+                      width: 90,
+                      decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.4),
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 0.0,
+                          vertical: 2,
+                        ),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 15.0, right: 10),
+                              child: FadeTransition(
+                                opacity: _isBlinking
+                                    ? _recController
+                                    : const AlwaysStoppedAnimation<double>(1.0),
+                                child: const Icon(
+                                  Icons.circle,
+                                  color: Colors.red,
+                                  size: 15.0,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              _formatTime(_elapsedSeconds),
+                              style: const TextStyle(
+                                fontSize: 15.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 15.0,
+                      left: 20,
+                    ),
+                    child: _flashModeControlColumnWidget(),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: starting
+                          ? Container(
+                              height: 80,
+                              width: 80,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                              ),
+                              child: IconButton(
+                                onPressed: () {
+                                  _toggleIcon();
+                                  _togglePlayPause();
+                                  _toggleBlinking();
+                                  setState(() {
+                                    starting = false;
+                                  });
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //       builder: (context) => const ReportPage(),
+                                  //     ));
+                                  // Navigator.replace(context,
+                                  //     oldRoute: MaterialPageRoute(
+                                  //       builder: (context) => const ModelDetectorPage(),
+                                  //     ),
+                                  //     newRoute: MaterialPageRoute(
+                                  //       builder: (context) => const ReportPage(),
+                                  //     ));
+                                },
+                                icon: const Icon(
+                                  Icons.circle,
+                                  color: Colors.red,
+                                  size: 30,
+                                ),
+                              ),
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 60,
+                                  width: 60,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.2),
+                                      border: Border.all(color: Colors.white),
+                                      shape: BoxShape.circle),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      _toggleIcon();
+                                      _togglePlayPause();
+                                      _toggleBlinking();
+                                    },
+                                    icon: Center(
+                                      child: AnimatedIcon(
+                                        icon: AnimatedIcons.pause_play,
+                                        color: Colors.white,
+                                        size: 40,
+                                        progress: _animationController,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 35.0),
+                                  child: Container(
+                                    height: 80,
+                                    width: 80,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                    ),
+                                    child: IconButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const InventoryV2Page(),
+                                          ),
+                                        );
+                                        // Navigator.replace(context,
+                                        //     oldRoute: MaterialPageRoute(
+                                        //       builder: (context) => const ModelDetectorPage(),
+                                        //     ),
+                                        //     newRoute: MaterialPageRoute(
+                                        //       builder: (context) => const ReportPage(),
+                                        //     ));
+                                      },
+                                      icon: const Icon(
+                                        Icons.stop_rounded,
+                                        color: Colors.black,
+                                        size: 50,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 60,
+                                  width: 60,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.2),
+                                      border: Border.all(color: Colors.white),
+                                      shape: BoxShape.circle),
+                                  child: IconButton(
+                                    onPressed: () async {
+                                      if (controller != null &&
+                                          controller!.value.isInitialized &&
+                                          !controller!.value.isRecordingVideo &&
+                                          _animationController.status ==
+                                              AnimationStatus.completed) {
+                                        await onTakePictureButtonPressed();
+                                      }
+                                    },
+                                    icon: const Icon(
+                                      Icons.camera_alt_outlined,
+                                      color: Colors.white,
+                                      size: 30,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -291,20 +398,24 @@ class _CameraDetectorPageState extends State<CameraDetectorPage>
       );
     } else {
       return Listener(
+        behavior: HitTestBehavior.translucent,
         onPointerDown: (_) => _pointers++,
         onPointerUp: (_) => _pointers--,
         child: CameraPreview(
           controller!,
-          child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-            return GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onScaleStart: _handleScaleStart,
-              onScaleUpdate: _handleScaleUpdate,
-              onTapDown: (TapDownDetails details) =>
-                  onViewFinderTap(details, constraints),
-            );
-          }),
+          child: SizedBox(
+            width: double.infinity,
+            child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onScaleStart: _handleScaleStart,
+                onScaleUpdate: _handleScaleUpdate,
+                onTapDown: (TapDownDetails details) =>
+                    onViewFinderTap(details, constraints),
+              );
+            }),
+          ),
         ),
       );
     }

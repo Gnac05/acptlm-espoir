@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:espoir_model_application/domain/_common/app_colors.dart';
 import 'package:espoir_model_application/presentation/report/widget/report_v2_widget.dart';
 import 'package:flutter/material.dart';
 
 class ReportV2Page extends StatelessWidget {
-  const ReportV2Page({super.key, required this.image});
+  const ReportV2Page(
+      {super.key, required this.image, this.islocalFile = false});
   final String image;
+  final bool islocalFile;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +60,9 @@ class ReportV2Page extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             image: DecorationImage(
-                                image: Image.asset(image).image,
+                                image: islocalFile
+                                    ? Image.file(File(image)).image
+                                    : Image.asset(image).image,
                                 fit: BoxFit.cover),
                           ),
                         ),

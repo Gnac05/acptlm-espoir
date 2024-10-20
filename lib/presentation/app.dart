@@ -4,8 +4,10 @@ import 'package:espoir_model_application/domain/_common/app_svg.dart';
 import 'package:espoir_model_application/presentation/_common-widget/my_drop_button.dart';
 import 'package:espoir_model_application/presentation/detector/camera_detector.dart';
 import 'package:espoir_model_application/presentation/inventory/inventory_v2_page.dart';
+import 'package:espoir_model_application/presentation/report/report_v2_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MyAppPage extends StatelessWidget {
   const MyAppPage({super.key});
@@ -34,7 +36,106 @@ class MyAppPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          final ImagePicker picker = ImagePicker();
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) => SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Container(
+                                      height: 10,
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey,
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Container(
+                                        height: 70,
+                                        width: 70,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: AppColors.primary,
+                                        ),
+                                        child: IconButton(
+                                          onPressed: () async {
+                                            // Pick an image.
+                                            final XFile? image =
+                                                await picker.pickImage(
+                                                    source:
+                                                        ImageSource.gallery);
+
+                                            if (context.mounted &&
+                                                image != null) {
+                                              Navigator.pop(context);
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ReportV2Page(
+                                                          image: image.path,
+                                                          islocalFile: true),
+                                                ),
+                                              );
+                                            }
+                                          },
+                                          icon: const Icon(
+                                            Icons.image,
+                                            size: 30,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 70,
+                                        width: 70,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: AppColors.primary,
+                                        ),
+                                        child: IconButton(
+                                          onPressed: () async {
+                                            // Capture a photo.
+                                            final XFile? photo =
+                                                await picker.pickImage(
+                                                    source: ImageSource.camera);
+
+                                            if (context.mounted &&
+                                                photo != null) {
+                                              Navigator.pop(context);
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ReportV2Page(
+                                                          image: photo.path,
+                                                          islocalFile: true),
+                                                ),
+                                              );
+                                            }
+                                          },
+                                          icon: const Icon(
+                                            Icons.camera_alt,
+                                            size: 30,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                         child: SvgPicture.asset(AppSvg.report),
                       ),
                       InkWell(
@@ -102,7 +203,7 @@ class MyAppPage extends StatelessWidget {
                       textStyle: const TextStyle(fontSize: 16),
                     ),
                     child: Text(
-                      'INVENTAIRES',
+                      'BASE DE DONNÉES',
                       style: TextStyle(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w500,
